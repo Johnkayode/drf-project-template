@@ -1,0 +1,13 @@
+.dist/
+.env
+*.env
+.env.*
+.venv
+env/
+db.sqlite3
+__pycache__/
+/.idea
+/.vscode
+media/
+buildspec.yml
+*.buildspec.yml
