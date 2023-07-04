@@ -14,5 +14,7 @@ def lock_task(timeout):
                     func(*args, **kwargs)
                 finally:
                     release_lock()
+
         return wrapper
+
     return task_exc

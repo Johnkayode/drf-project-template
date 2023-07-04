@@ -17,7 +17,7 @@ def send_email(
     recipients: typing.List[str],
     context: typing.Optional[dict] = None,
     sender: str = settings.DEFAULT_FROM_EMAIL,
-    pdf: typing.Optional[str]=None,
+    pdf: typing.Optional[str] = None,
     reply_to: str = "",
     text_template_name: str = "",
 ):
