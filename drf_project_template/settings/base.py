@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # thirdparty apps
+    "drf_spectacular",
     "rest_framework",
     # local apps
     "drf_project_template.apps.accounts"
@@ -125,7 +126,12 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # rest framework
-REST_FRAMEWORK = {}
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
 
 # celery
 # Celery Configuration Options
@@ -144,3 +150,14 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_PORT = config("EMAIL_PORT")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=False, cast=bool)
+
+# drf spectacular config
+SPECTACULAR_SETTINGS = {
+    "TITLE": config('API_PROJECT_TITLE', "DRF_PROJECT_TEMPLATE API"),
+    "DESCRIPTION": config("API_PROJECT_DESCRIPTION", "Core APIS for DRF_PROJECT_TEMPLATE"),
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True
+    # OTHER SETTINGS
+}
+

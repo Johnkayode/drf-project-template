@@ -9,12 +9,14 @@ from rest_framework import (
 
 
 class RegistrationView(views.APIView):
+    permission_classes = [permissions.AllowAny]
     
     def get(self, request, *args, **kwargs):
         return response.Response(
             {
                 "status": "OK",
                 "message": "Server OK",
+                "data": None
             },
             status=status.HTTP_200_OK,
         )

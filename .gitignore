@@ -1,7 +1,6 @@
 .dist/
 .env
 *.env
-.env.*
 .venv
 env/
 db.sqlite3
