@@ -17,6 +17,8 @@ python-decouple = "^3.8"
 django-celery-beat = "^2.5.0"
 black = "^23.3.0"
 drf-spectacular = "^0.26.3"
+dj-rest-auth = "^4.0.1"
+django-allauth = "^0.54.0"
 
 
 [build-system]

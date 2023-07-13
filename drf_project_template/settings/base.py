@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     # thirdparty apps
     "drf_spectacular",
     "rest_framework",
+    "dj_rest_auth",
     # local apps
     "drf_project_template.apps.accounts"
 ]
