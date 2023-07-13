@@ -30,6 +30,9 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "rest_framework",
     "dj_rest_auth",
+    "allauth",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
     # local apps
     "drf_project_template.apps.accounts"
 ]
