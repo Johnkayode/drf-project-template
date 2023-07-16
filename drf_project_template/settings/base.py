@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     # thirdparty apps
     "drf_spectacular",
     "rest_framework",
-    "dj_rest_auth",
+    "rest_framework.authtoken",
+    "dj_rest_auth.registration",
     "allauth",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
@@ -74,15 +75,23 @@ WSGI_APPLICATION =  "drf_project_template.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOST"),
-        "PORT": config("DB_PORT"),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": config("DB_NAME"),
+#         "USER": config("DB_USER"),
+#         "PASSWORD": config("DB_PASSWORD"),
+#         "HOST": config("DB_HOST"),
+#         "PORT": config("DB_PORT"),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -101,6 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+# custom user model
+AUTH_USER_MODEL = "accounts.User"
 
 
 # Internationalization
@@ -134,6 +146,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+     # Swagger/docs
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
@@ -154,6 +167,33 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_PORT = config("EMAIL_PORT")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=False, cast=bool)
+
+# django rest auth
+REST_AUTH = {
+    "REGISTER_SERIALIZER": "drf_project_template.apps.accounts.serializers.RegisterSerializer",
+}
+
+OLD_PASSWORD_FIELD_ENABLED = True
+
+# REST_AUTH_TOKEN_MODEL = "knox.models.AuthToken"
+
+# REST_AUTH_TOKEN_CREATOR = "apps.accounts.utils.default_create_token"
+
+# REST_AUTH_SESSION_LOGIN = False
+
+# # allauth config
+# ACCOUNT_ADAPTER = "user.adapters.AccountAdapter"
+# ACCOUNT_AUTHENTICATION_METHOD = "email"
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# # ACCOUNT_EMAIL_VERIFICATION = 1
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "email"
+ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
+# ACCOUNT_FORMS = {
+#     "reset_password": "apps.accounts.forms.CustomResetPasswordForm",
+# }
+
 
 # drf spectacular config
 SPECTACULAR_SETTINGS = {
