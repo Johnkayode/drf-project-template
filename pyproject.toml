@@ -19,6 +19,7 @@ black = "^23.3.0"
 drf-spectacular = "^0.26.3"
 dj-rest-auth = "^4.0.1"
 django-allauth = "^0.54.0"
+pyotp = "^2.8.0"
 
 
 [build-system]

@@ -1,4 +1,5 @@
 import uuid
+import pyotp
 from allauth.account.models import EmailAddress
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -38,6 +39,10 @@ class User(AbstractUser):
     def email_verified(self) -> bool:
         return EmailAddress.objects.filter(email=self.email, verified=True).exists()
 
+    @property
+    def first_time_login(self) -> bool:
+        return self.last_login is None
+        
     @property
     def has_profile(self) -> bool:
         """
