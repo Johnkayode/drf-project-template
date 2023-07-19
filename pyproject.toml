@@ -20,6 +20,8 @@ drf-spectacular = "^0.26.3"
 dj-rest-auth = "^4.0.1"
 django-allauth = "^0.54.0"
 pyotp = "^2.8.0"
+django-phonenumber-field = "^7.1.0"
+phonenumbers = "^8.13.16"
 
 
 [build-system]

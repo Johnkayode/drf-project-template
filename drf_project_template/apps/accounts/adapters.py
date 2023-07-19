@@ -3,6 +3,7 @@ from django.conf import settings
 
 from allauth import app_settings as allauth_settings
 from allauth.account.adapter import DefaultAccountAdapter
+from phonenumber_field.phonenumber import PhoneNumber
 
 
 
@@ -24,6 +25,7 @@ class AccountAdapter(DefaultAccountAdapter):
         email = data.get("email")
         first_name = data.get("first_name")
         last_name = data.get("last_name")
+        phone_number: PhoneNumber = data.get("phone_number")
         
         user_email(user, email)
 
@@ -31,6 +33,8 @@ class AccountAdapter(DefaultAccountAdapter):
             user_field(user, "first_name", first_name)
         if last_name:
             user_field(user, "last_name", last_name)
+        if phone_number:
+            user_field(user, "phone_number", phone_number.as_e164)
 
         if "password1" in data:
             user.set_password(data["password1"])

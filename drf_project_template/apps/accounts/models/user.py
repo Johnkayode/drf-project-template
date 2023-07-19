@@ -4,6 +4,8 @@ from allauth.account.models import EmailAddress
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.phonenumber import PhoneNumber
 
 from drf_project_template.apps.accounts.utils import generate_public_id
 
@@ -12,7 +14,7 @@ from drf_project_template.apps.accounts.utils import generate_public_id
 class User(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
-    phone_number = models.CharField(_("phone number"), max_length=11, blank=True)
+    phone_number = PhoneNumberField(_("phone number"), blank=True)
     phone_number_verified = models.BooleanField(default=False)
 
     uid = models.UUIDField(unique=True, editable=False, null=True, default=uuid.uuid4)
