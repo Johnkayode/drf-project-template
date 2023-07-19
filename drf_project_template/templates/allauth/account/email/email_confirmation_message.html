@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% load account %}
+{% load i18n %}
+
+
+{% block content %}{% autoescape off %}
+    <p style="margin-bottom: 1rem">
+        To verify your Email Address, please click on the link provided below.
+    </p>
+    <p style="margin-bottom: 1rem">
+        <a style="color: #302361" href="{{ frontend_url }}/verify-email?key={{ key }}">
+            {{ frontend_url }}/verify-email?key={{ key }}
+        </a>
+    </p>
+{% endautoescape %}{% endblock %}

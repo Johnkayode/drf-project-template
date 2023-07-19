@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+{% load account %}
+{% load i18n %}
+
+
+{% block content %}{% autoescape off %}
+    <p>
+        Hello, {{ user.full_name }}
+    </p>
+    <p style="margin-bottom: 1rem">
+        To verify your Email Address and complete your sign up
+        process, please click on the link provided below.
+    </p>
+    <p style="margin-bottom: 1rem">
+        <a style="color: #302361" href="{{ frontend_url }}/verify-email?key={{ key }}">
+            {{ frontend_url }}/verify-email?key={{ key }}
+        </a>
+    </p>
+    <p style="margin-bottom: 1rem">
+        Please note that this link expires in {{ expiry }} and if it is
+        not used within this time frame, you will need to request a
+        new one.
+    </p>
+
+{% endautoescape %}{% endblock %}

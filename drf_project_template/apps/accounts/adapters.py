@@ -12,6 +12,37 @@ class AccountAdapter(DefaultAccountAdapter):
             return email.lower()
         return email
 
+    def save_user(self, request, user, form, commit=True):
+        """
+        Saves a new `User` instance using information provided in the
+        signup form.
+        """
+        from .utils import user_email, user_field
+
+        data = form.cleaned_data
+
+        email = data.get("email")
+        first_name = data.get("first_name")
+        last_name = data.get("last_name")
+        
+        user_email(user, email)
+
+        if first_name:
+            user_field(user, "first_name", first_name)
+        if last_name:
+            user_field(user, "last_name", last_name)
+
+        if "password1" in data:
+            user.set_password(data["password1"])
+        else:
+            user.set_unusable_password()
+        
+        if commit:
+            # Ability not to commit makes it easier to derive from
+            # this adapter by adding
+            user.save()
+        return user
+
     def send_confirmation_mail(self, request, emailconfirmation, signup):
         current_site = get_current_site(request)
         activate_url = self.get_email_confirmation_url(request, emailconfirmation)
@@ -31,5 +62,8 @@ class AccountAdapter(DefaultAccountAdapter):
             ),
         }
         
-        email_template = "account/email/email_confirmation_signup"
+        if signup:
+            email_template = "account/email/email_confirmation_signup"
+        else:
+            email_template = 'account/email/email_confirmation'
         self.send_mail(email_template, emailconfirmation.email_address.email, ctx)
