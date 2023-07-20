@@ -1,11 +1,13 @@
+from typing import Optional
 import uuid
 import pyotp
 from allauth.account.models import EmailAddress
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
-from phonenumber_field.phonenumber import PhoneNumber
+
 
 from drf_project_template.apps.accounts.utils import generate_public_id
 
@@ -28,6 +30,8 @@ class User(AbstractUser):
     )
  
     password_change_required = models.BooleanField(default=False)
+
+    _totp: Optional[pyotp.TOTP] = None
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -60,3 +64,35 @@ class User(AbstractUser):
             "phone": self.phone_number,
             "public_id": self.public_id,
         }
+
+    def totp(self, digits: int = 6, interval: int = 300, **kwargs) -> pyotp.TOTP:
+        if not self._totp:
+            self._totp = pyotp.TOTP(
+                self.uid, digits=digits, interval=interval, **kwargs
+            )
+        return self._totp
+
+    def generate_otp(self, **kwargs) -> tuple:
+        current_time = now()
+        _totp = self.totp()
+
+        otp = _totp.generate_otp(_totp.timecode(current_time))
+        interval = _totp.interval
+
+        message = (
+            f"Your One-Time Passcode is {otp} (valid for {interval} seconds)"
+        )
+        return otp, interval, message
+
+    def dispatch_otp(self, medium: str = ""):
+        _, _, message = self.generate_otp()
+        if medium == "email":
+            pass
+        elif medium == "phone":
+            pass
+        print("--------%s--------" % message)
+
+    def verify_totp_code(self, code: str) -> bool:
+        return self.totp().verify(code)
+
+    

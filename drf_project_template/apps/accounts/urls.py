@@ -54,4 +54,8 @@ urlpatterns = [
     path(
         "user/", dj_rest_auth_views.UserDetailsView.as_view(), name="rest_user_details"
     ),
+
+    path(
+        "login/", views.PreLoginView.as_view(), name="prelogin"
+    )
 ]
