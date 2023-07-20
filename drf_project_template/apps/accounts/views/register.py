@@ -3,6 +3,7 @@ from allauth.account.utils import complete_signup
 from allauth.account import app_settings as allauth_settings
 from django.utils.translation import gettext as _
 from dj_rest_auth.registration import views as dj_rest_auth_registration_views
+
 from rest_framework import (
     exceptions,
     permissions,
