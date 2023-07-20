@@ -1,10 +1,12 @@
 from rest_framework import serializers, exceptions
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from dj_rest_auth.serializers import LoginSerializer as DJRestLoginSerializer
 
 from drf_project_template.apps.accounts.models import User
 
 
+DEBUG = settings.DEBUG
 class PreLoginSerializer(DJRestLoginSerializer):
     username = None
     email = serializers.EmailField(label=_("email"), write_only=True, required=True)
@@ -44,6 +46,31 @@ class PreLoginSerializer(DJRestLoginSerializer):
         attrs["user"] = user
         return attrs
 
+    @staticmethod
+    def mfa_required(user: "User") -> bool:
+        # TODO: Implement when settings model available
+        return True
 
 class LoginSerializer(PreLoginSerializer):
     mfa_code = serializers.CharField(required=False)
+
+    def validate(self, attrs):
+        attrs = super(LoginSerializer, self).validate(attrs)
+
+        user: "User" = attrs.get("user")
+        mfa_required: bool = self.mfa_required(user)
+        mfa_code: str = attrs.get("mfa_code")
+
+        if mfa_required and not DEBUG:
+
+            if not mfa_code:
+                msg = _("OTP code is required")
+                raise serializers.ValidationError(msg, code="authorization")
+            mfa_valid = user.verify_totp_code(mfa_code)
+
+            if not mfa_valid:
+                _msg = _("OTP is invalid or has expired")
+                raise serializers.ValidationError(_msg, code="authorization")
+
+        return attrs
+
