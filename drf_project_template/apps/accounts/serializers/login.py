@@ -48,8 +48,10 @@ class PreLoginSerializer(DJRestLoginSerializer):
 
     @staticmethod
     def mfa_required(user: "User") -> bool:
-        # TODO: Implement when settings model available
-        return True
+        _user_profile = getattr(user, "profile", None)
+        if _user_profile:
+            return _user_profile.mfa_required
+        return False
 
 class LoginSerializer(PreLoginSerializer):
     mfa_code = serializers.CharField(required=False)

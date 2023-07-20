@@ -40,8 +40,10 @@ class PreLoginView(generics.GenericAPIView):
         return self._user.dispatch_otp(medium)
 
     def mfa_required(self, user: "User") -> bool:
-        # TODO: Implement in user profile
-        return True
+        _user_profile = getattr(user, "profile", None)
+        if _user_profile:
+            return _user_profile.mfa_required
+        return False
 
 
 class LoginView():
